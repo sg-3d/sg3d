@@ -10,7 +10,7 @@
     <a href='https://sg-3d.github.io'>
       <img src='https://img.shields.io/badge/Project-Page-blue?style=plastic&logo=Google%20chrome&logoColor=blue' alt='Project Page'>
     </a>
-    <a href=''>
+    <a href='https://huggingface.co/spaces/li-qing/SG3D-Demo'>
       <img src='https://img.shields.io/badge/Demo-HuggingFace-yellow?style=plastic&logo=AirPlay%20Video&logoColor=yellow' alt='HuggigFace'>
     </a>
     <a href=''> <img src='https://img.shields.io/badge/Model-Checkpoints-orange?style=plastic&logo=Google%20Drive&logoColor=orange'  alt='Checkpoints(TODO)'>
@@ -107,11 +107,10 @@ We would like to thank the authors of [LEO](https://embodied-generalist.github.i
 
 
 ### Citation:
-```
-@article{zhu2024unifying,
-    title={Unifying 3D Vision-Language Understanding via Promptable Queries},
-    author={Zhu, Ziyu and Zhang, Zhuofan and Ma, Xiaojian and Niu, Xuesong and Chen, Yixin and Jia, Baoxiong and Deng, Zhidong and Huang, Siyuan and Li, Qing},
-    journal={arXiv preprint arXiv:2405.11442},
+```bibtex
+@article{sg3d,
+    title={Task-oriented Sequential Grounding in 3D Scenes},
+    author={Zhang, Zhuofan and Zhu, Ziyu and Li, Pengxiang and Liu, Tengyu and Ma, Xiaojian and Chen, Yixin and Jia, Baoxiong and Huang, Siyuan and Li, Qing},
     year={2024}
 }
 ```
