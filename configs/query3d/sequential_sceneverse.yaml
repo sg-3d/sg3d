@@ -1,0 +1,175 @@
+# Experiment general info
+name: "Sequential-Grounding"
+rng_seed: 42
+num_gpu: 1
+mode: "train"
+note: ""
+# Choose keywords to feature your saving directory
+base_dir: ""
+exp_dir: ""
+
+resume: False
+
+debug:
+  flag: False
+  hard_debug: False
+  debug_size: 4
+
+logger:
+  name: "wandb"
+  entity: TBD
+  autoname: True
+
+# dataset details
+data:
+  load_scan_options:
+    load_inst_info: True
+    load_pc_info: True
+    load_segment_info: False
+    load_image_segment_feat: False
+    load_point_segment_feat: False
+    load_image_obj_feat: False
+    load_voxel_obj_feat: False
+  process_num: 0
+  scene_verse_base: TBD
+  scene_verse_aux: TBD
+  scene_verse_pred:  TBD
+  sequential_grounding_base: TBD
+  multi_step_context: True
+  drop_data_percent: 0.0
+
+  train: [SequentialGroundingSingleStepScanNet, SequentialGroundingSingleStep3RScan, SequentialGroundingSingleStepMultiScan, SequentialGroundingSingleStepARKitScenes, SequentialGroundingSingleStepHM3D] # 
+  val: ${data.train}
+  test: ${data.train}
+  SequentialGroundingSingleStepScanNet:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStep3RScan:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStepMultiScan:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStepARKitScenes:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStepHM3D:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+
+task: 'Query3D'
+data_wrapper:
+  train: 'UnifiedTaskDatasetWrapper'
+  val: ${data_wrapper.train}
+  test: ${data_wrapper.train}
+  tokenizer: openai/clip-vit-large-patch14
+  generation_tokenizer: t5-small
+
+# Training details
+trainer: "MultitaskTrainer"
+ckpt_path: ""
+pretrain_ckpt_path: None
+
+# dataloader details
+dataloader:
+  # This is a per-gpu batchsize
+  batchsize: 32
+  num_workers: 5
+  balance_dataset: False
+  filter_empty_annotations: False
+
+solver:
+  gradient_accumulation_steps: 1
+  lr: 1e-4
+  grad_norm: 5.0
+  optim:
+    name: "AdamW"
+    args:
+      betas: [0.9, 0.98]
+  sched:
+    name: "warmup_cosine"
+    args:
+      warmup_steps: 5000
+  epochs: 50
+  epochs_per_eval: 10
+  epochs_per_save: 0
+
+eval:
+  save: False
+
+# Model details
+pretrained_weights_dir: TBD
+model:
+  name: Query3DUnified
+  memories: [pc, prompt]
+  hidden_size: 768
+  use_offline_voxel_fts: True
+  use_offline_attn_mask: False
+  skip_query_encoder_mask_pred: True
+  obj_loc:
+    spatial_dim: 5
+    dim_loc: 6
+    pairwise_rel_type: "center"
+  txt_encoder:
+    name: CLIPLanguageEncoder
+    args:
+      use_projection: True
+      projection_type: "mlp"
+      num_projection_layers: 1
+  mv_encoder:
+    name: ObjectEncoder
+    args:
+      input_feat_size : 768
+      hidden_size: ${model.hidden_size}
+      use_projection: True
+      dropout: 0.1
+      use_cls_head: False
+  voxel_encoder:
+    name: ObjectEncoder
+    args:
+      input_feat_size : 128
+      hidden_size: ${model.hidden_size}
+      use_projection: True
+      dropout: 0.1
+      use_cls_head: False
+  pc_encoder:
+    name: ObjectEncoder
+    args:
+      backbone: "pointnet++"
+      freeze_backbone: True
+      hidden_size: ${model.hidden_size}
+      dropout: 0.1
+      pretrained: ${pretrained_weights_dir}/pointnet_sceneverse.pth
+      use_cls_head: False
+  unified_encoder:
+    name: "QueryMaskEncoder"
+    args:
+      hidden_size: ${model.hidden_size}
+      num_attention_heads: 12
+      num_layers: 4
+      spatial_selfattn: True
+      memories: ${model.memories}
+      drop_memories_test: []
+      memory_dropout: 0.6
+      structure: "mixed"
+      use_self_mask: False
+      num_blocks: 1
+
+  heads: ["ground", "generation"]
+  ground_head:
+    name: "GroundHead"
+    args:
+      hidden_size: 384
+      input_size: ${model.hidden_size}
+      dropout: 0.3
+  generation_head:
+    name: "T5"
+    args:
+      variant: t5-small
+      input_size: ${model.hidden_size}
+      use_projection: True
+      max_new_tokens: 50 # the max length for generated output sequence
+    lr: 1e-5
+  loss_list: [ground_loss, generation_loss]
+  vis_loss_list: []
+  loss_weights: {'ground_loss': 10}

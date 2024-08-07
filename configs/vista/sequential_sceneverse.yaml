@@ -1,0 +1,154 @@
+# Experiment general info
+name: "Sequential-Grounding"
+rng_seed: 42
+num_gpu: 1
+mode: "train"
+note: ""
+# Choose keywords to feature your saving directory
+base_dir: ""
+exp_dir: ""
+
+resume: False
+
+debug:
+  flag: False
+  hard_debug: False
+  debug_size: 4
+
+logger:
+  name: "wandb"
+  entity: TBD
+  autoname: True
+
+# dataset details
+data:
+  load_scan_options:
+    load_inst_info: True
+    load_pc_info: True
+    load_segment_info: False
+    load_image_segment_feat: False
+    load_point_segment_feat: False
+    load_image_obj_feat: False
+    load_voxel_obj_feat: False
+  process_num: 0
+  scene_verse_base: TBD
+  scene_verse_aux: TBD
+  scene_verse_pred:  TBD
+  sequential_grounding_base: TBD
+  multi_step_context: True
+  drop_data_percent: 0.0
+
+  train: [SequentialGroundingSingleStepScanNet, SequentialGroundingSingleStep3RScan, SequentialGroundingSingleStepMultiScan, SequentialGroundingSingleStepARKitScenes, SequentialGroundingSingleStepHM3D] # 
+  val: ${data.train}
+  test: ${data.train}
+  SequentialGroundingSingleStepScanNet:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStep3RScan:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStepMultiScan:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStepARKitScenes:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+  SequentialGroundingSingleStepHM3D:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingSingleStepEval"
+
+task: 'Query3D'
+data_wrapper:
+  train: 'UnifiedTaskDatasetWrapper'
+  val: ${data_wrapper.train}
+  test: ${data_wrapper.train}
+  tokenizer: bert-base-uncased
+  generation_tokenizer: t5-small
+
+# Training details
+trainer: "MultitaskTrainer"
+ckpt_path: ""
+pretrain_ckpt_path: TBD
+
+# dataloader details
+dataloader:
+  # This is a per-gpu batchsize
+  batchsize: 32
+  num_workers: 5
+  balance_dataset: False
+  filter_empty_annotations: False
+
+solver:
+  gradient_accumulation_steps: 1
+  lr: 1e-4
+  grad_norm: 5.0
+  optim:
+    name: "AdamW"
+    args:
+      betas: [0.9, 0.98]
+  sched:
+    name: "warmup_cosine"
+    args:
+      warmup_steps: 5000
+  epochs: 50
+  epochs_per_eval: 10
+  epochs_per_save: 0
+
+eval:
+  save: False
+
+# Model details
+pretrained_weights_dir: TBD
+model:
+  name: Vista3DSeq
+  language:
+    # This part could be further optimized to be using
+    # huggingface yaml config files
+    name: "BERTLanguageEncoder"
+    args:
+      weights: "bert-base-uncased"
+      hidden_size: 768
+      num_hidden_layers: 4
+      num_attention_heads: 12
+      type_vocab_size: 2
+    lr: 1e-5
+  vision:
+#    name: "pointnet_point_encoder"
+#    args:
+#      path: None
+#      freeze: False
+    name: "PointTokenizeEncoder"
+    args:
+        backbone: "pointnet++"
+        hidden_size: 768
+        freeze: True
+        path: TBD
+        num_attention_heads: 12
+        spatial_dim: 5
+        num_layers: 4
+        dim_loc: 6
+        pairwise_rel_type: "center"
+        use_matmul_label: False
+        glove_path: TBD
+    lr: 1e-4
+  grounding:
+    name: "UnifiedSpatialCrossEncoderV2"
+    args:
+      hidden_size: 768
+      num_attention_heads: 12
+      num_layers: 4
+      dim_loc: 6
+    lr: 1e-4
+  heads:
+    head_list: ["ground_head"]
+    ground_head:
+      name: "GroundHeadV1"
+      args:
+        hidden_size: 384
+        input_size: 768
+        sem_cls_size: 607
+        dropout: 0.3
+        detach_all_aux_loss: False
+  loss_list: [ground_loss]
+  vis_loss_list: []
+  loss_weights: {'ground_loss': 10.0}

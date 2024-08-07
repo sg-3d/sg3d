@@ -1,0 +1,174 @@
+# Experiment general info
+name: "Sequential-Grounding"
+rng_seed: 42
+num_gpu: 1
+mode: "train"
+note: ""
+# Choose keywords to feature your saving directory
+base_dir: ""
+exp_dir: ""
+
+resume: False
+
+debug:
+  flag: False
+  hard_debug: False
+  debug_size: 4
+
+logger:
+  name: "wandb"
+  entity: TBD
+  autoname: True
+
+# dataset details
+data:
+  load_scan_options:
+    load_inst_info: True
+    load_pc_info: True
+    load_segment_info: False
+    load_image_segment_feat: False
+    load_point_segment_feat: False
+    load_image_obj_feat: False
+    load_voxel_obj_feat: False
+  process_num: 0
+  scene_verse_base: TBD
+  scene_verse_aux: TBD
+  scene_verse_pred:  TBD
+  sequential_grounding_base: TBD
+  multi_step_context: True
+  drop_data_percent: 0.0
+
+  train: [SequentialGroundingScanNet, SequentialGrounding3RScan, SequentialGroundingMultiScan, SequentialGroundingARKitScenes, SequentialGroundingHM3D]
+  val: ${data.train}
+  test: ${data.train}
+  SequentialGroundingScanNet:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingEval"
+  SequentialGrounding3RScan:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingEval"
+  SequentialGroundingMultiScan:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingEval"
+  SequentialGroundingARKitScenes:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingEval"
+  SequentialGroundingHM3D:
+    pc_type: 'gt'
+    evaluator: "SequentialGroundingEval"
+  
+task: 'SequentialGrounding'
+data_wrapper:
+  train: 'SequentialGroundingDatasetWrapper'
+  val: ${data_wrapper.train}
+  test: ${data_wrapper.train}
+
+# Training details
+trainer: "MultitaskTrainer"
+ckpt_path: ""
+pretrain_ckpt_path: None
+
+# dataloader details
+dataloader:
+  # This is a per-gpu batchsize
+  batchsize: 4
+  num_workers: 1
+  balance_dataset: False
+  filter_empty_annotations: False
+
+solver:
+  gradient_accumulation_steps: 5
+  lr: 1e-4
+  grad_norm: 5.0
+  optim:
+    name: "AdamW"
+    args:
+      lr: ${solver.lr}
+      betas: [0.9, 0.999]
+      weight_decay: 0.05
+  sched:
+    name: "warmup_cosine"
+    args:
+      warmup_steps: 400
+  epochs: 50
+  epochs_per_eval: 10
+  epochs_per_save: 0
+
+eval:
+  save: False
+  predict_mode: False
+
+# Model details
+model:
+  name: SequentialGrounder
+  pre_grounding: True
+  llm:
+    name: Vicuna7B
+    cfg_path: TBD
+    truncation_side: right
+    max_context_len: 256
+    max_out_len: 256
+    lora:
+      flag: True
+      rank: 16
+      alpha: 16
+      target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+      dropout: 0.0
+
+  vision2d:
+    name: GridFeatureExtractor2D
+    backbone_name: convnext_base
+    backbone_pretrain_dataset: laion2b
+    use_pretrain: True
+    pooling: avg # null, avg, conv, attn
+    freeze: True
+  
+  vision3d:
+    name: OSE3D
+    hidden_dim: 256
+    use_spatial_attn: True
+    use_embodied_token: False 
+    fourier_size: 84
+    lr: 1e-4
+
+    spatial_encoder:
+      dim_loc: 6
+      num_attention_heads: 8
+      dim_feedforward: 2048
+      dropout: 0.1
+      activation: gelu
+      spatial_multihead: True
+      spatial_dim: 5   # 1, 4, 5
+      spatial_dist_norm: True
+      spatial_attn_fusion: cond   # cond, mul, bias, ctx, add
+      num_layers: 3
+      obj_loc_encoding: same_all   # same_0, same_all, diff_all
+      pairwise_rel_type: center
+    
+    backbone:
+      net:
+        _target_: modules.layers.pointnet.PointNetPP
+        sa_n_points: [32, 16, null]
+        sa_n_samples: [32, 32, null]
+        sa_radii: [0.2, 0.4, null]
+        sa_mlps: [[3, 64, 64, 128], [128, 128, 128, 256], [256, 256, 512, 768]]
+
+      path: TBD
+      freeze: True
+
+  clip_txt_guidance:
+    flag: False   # for eai
+    clip_out_dim: 1024
+  
+  ground_head:
+    name: SequentialGroundHead
+    args: 
+      hidden_size: 4096
+      num_attention_heads: 32
+      num_layers: 2
+    lr: 1e-4
+    
+      
+  loss_list: [LLMLoss, SequentialGroundLoss, obj_cls_post_loss]
+  vis_loss_list: []
+  loss_weights: {'SequentialGroundLoss': 1}
