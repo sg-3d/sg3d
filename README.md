@@ -1,10 +1,10 @@
 ## Task-oriented Sequential Grounding in 3D Scenes
 
 <p align="left">
-    <a href=''>
+    <a href='https://arxiv.org/pdf/2408.04034'>
       <img src='https://img.shields.io/badge/Paper-PDF-red?style=plastic&logo=adobeacrobatreader&logoColor=red' alt='Paper PDF'>
     </a>
-    <a href=''>
+    <a href='https://arxiv.org/abs/2408.04034'>
       <img src='https://img.shields.io/badge/Paper-arXiv-green?style=plastic&logo=arXiv&logoColor=green' alt='Paper arXiv'>
     </a>
     <a href='https://sg-3d.github.io'>
@@ -13,7 +13,7 @@
     <a href='https://huggingface.co/spaces/li-qing/SG3D-Demo'>
       <img src='https://img.shields.io/badge/Demo-HuggingFace-yellow?style=plastic&logo=AirPlay%20Video&logoColor=yellow' alt='HuggigFace'>
     </a>
-    <a href=''> <img src='https://img.shields.io/badge/Model-Checkpoints-orange?style=plastic&logo=Google%20Drive&logoColor=orange'  alt='Checkpoints(TODO)'>
+    <a href='https://drive.google.com/drive/folders/1WU5UJmOvChdNDQTXzCXCc0sf46q0Syhw?usp=sharing'> <img src='https://img.shields.io/badge/Model-Checkpoints-orange?style=plastic&logo=Google%20Drive&logoColor=orange'  alt='Checkpoints(TODO)'>
     </a>
 </p>
 
@@ -63,7 +63,7 @@ cd ..
 1. download sceneverse data  from [scene_verse_base](https://github.com/scene-verse/sceneverse?tab=readme-ov-file) and change `data.scene_verse_base` to sceneverse data directory.
 2. download segment level data from [scene_ver_aux](https://drive.google.com/drive/folders/1em0G5S4aH4lCIfnjLxyFO3DV3Rwuwnqh?usp=share_link) and change `data.scene_verse_aux` to download data directory.
 3. download other data from [scene_verse_pred](https://drive.google.com/drive/folders/12BjbhXzV7lON4X0tx3e7DdvZHhI1Q1f2?usp=share_link) and change `data.scene_verse_pred` to download data directory.
-4. download sequential grounding checkpoint and data from [sequential-grounding]() and change `data.sequential_grounding_base` to download directory, change `pretrained_weights_dir` to downloaded pointnet dir.
+4. download sequential grounding checkpoint and data from [sequential-grounding](https://drive.google.com/drive/folders/1WU5UJmOvChdNDQTXzCXCc0sf46q0Syhw?usp=sharing) and change `data.sequential_grounding_base` to download directory, change `pretrained_weights_dir` to downloaded pointnet dir.
 4. download Vicuna-7B form [Vicuna](https://huggingface.co/huangjy-pku/vicuna-7b/tree/main) and change `model.llm.cfg_path`
 5. change TBD in config
 
@@ -111,6 +111,7 @@ We would like to thank the authors of [LEO](https://embodied-generalist.github.i
 @article{sg3d,
     title={Task-oriented Sequential Grounding in 3D Scenes},
     author={Zhang, Zhuofan and Zhu, Ziyu and Li, Pengxiang and Liu, Tengyu and Ma, Xiaojian and Chen, Yixin and Jia, Baoxiong and Huang, Siyuan and Li, Qing},
+    journal={arXiv preprint arXiv:2408.04034}
     year={2024}
 }
 ```
