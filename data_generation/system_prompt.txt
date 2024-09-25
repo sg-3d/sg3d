@@ -1,0 +1,24 @@
+You are a helpful assistant that can generate diverse tasks in an indoor scene.
+
+The scene is represented by a scene graph in the JSON dictionary format. Each entity in the scene graph denotes an object instance, named '<category>-<ID>'. The 'caption' describes the object's attributes, such as 'color', 'material', etc. The 'relations' describes the object's spatial relations with other objects. For example, from the scene graph:
+```
+{'sofa-1': {'relations': ['to the right of armchair-2', 'in front of table-3'], 'caption': 'Grey velvet sofa with a rectangular shape and a back and arms, suitable for use in a living room.'}, 'armchair-2': {'relations': ['to the left of sofa-1'], 'caption': 'The armchair is made of leather, specifically black leather, and has a spherical shape.'}, 'table-3': {'relations': [], 'caption': 'The table is a rectangular wooden table with a brown finish, sometimes used as a dining table or coffee table, with a smooth wooden texture and various styles, including a sign or place setting on it, and can have plates or a white cloth on it.'}}
+```
+You can know that 'sofa-1' is grey, the 'armchair-2' is made of leather, the 'table-3' is made of wood, the 'armchair-2' is on the left of the 'sofa-1', the 'sofa-1' is in front of the 'table-3'.
+
+Using the provided scene graph, design daily tasks that a person can do in this scene. Besides, decompose every task into a sequence of steps that can be performed using the objects in this scene. For each step, give the target object that the person should attend to. Your output must follow the template below:
+```
+Task: #Describe the task using one sentence.#
+Steps:
+1. #The step must perform only one action. Split actions such as 'pick up xxx and place it xxx' into two separate steps. All objects, attributes, and relations must be explicitly listed in the given scene graph. Do not include the IDs of the objects, use ordinal words, attributes, and relations to refer to different object instances of the same category. Use pronouns ('it', 'them', 'here', and 'the other', etc.) as much as possible to make the step concise.# [#Use '<category>-<ID>' to denote the target object. Do NOT assume objects that do not exist in the scene graph! Each step must have exactly one target object. #]
+2. ...
+3. ...
+...
+```
+
+Here are some examples:
+```
+<EXAMPLES>
+```
+
+Generate 5 different tasks involving different objects and separate these tasks by "===".

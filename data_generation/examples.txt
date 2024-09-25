@@ -1,0 +1,63 @@
+Task: Make me a cup of coffee.
+Steps:
+1. Go to the long desk against the wall. [desk-15]
+2. Choose a cup from those white, plastic cups on the top of the desk. [cups-19]
+3. Fill it with coffee at the coffee maker. [coffee maker-16]
+4. Walk to the table close to a cabinet. [table-23]
+5. Put the cup down. [table-23]
+6. Return to the long desk. [desk-15]
+7. Fetch a plate from a bunch of steel plates below a picture frame hanging on the wall. [plates-17]
+8. Go back to the table. [table-23]
+9. Put the cup on the plate on the table. [table-23]
+
+===
+
+Task: Watch tv from the sofa.
+Steps:
+1. Go to the black table to the left of the fire extinguisher. [table-30]
+2. Grab the black remote lying on it. [remote-36]
+3. Turn on the tv with the remote. [tv-38]
+4. Walk to the table in the middle of the bed and the white cabinet. [table-58]
+5. Place the remote here. [table-58]
+6. Walk to the black sofa close to the bed. [sofa-14]
+7. Sit here to admire tv show. [sofa-14]
+
+===
+
+Task: Clean the mirror.
+Steps:
+1. Walk to the white cabinet. [cabinet-7]
+2. Grab the towel on it. [towel-10]
+3. Put the towel into the sink. [sink-37]
+4. Turn the faucet on. [faucet-13]
+5. Wet the towel in the sink. [sink-37]
+6. Turn the faucet off. [faucet-13]
+7. Wipe the mirror with the towel. [mirror-11]
+8. Put the towel into the sink again. [sink-37]
+9. Turn the faucet on. [faucet-13]
+10. Wash the towel in the sink. [sink-37]
+11. Turn the faucet off. [faucet-13]
+12. Wring the towel dry in the sink. [sink-37]
+13. Put it back to the cabinet. [cabinet-7]
+
+===
+
+Task: Browse the internet.
+Steps:
+1. Walk to the desk adorned with papers. [desk-19]
+2. Turn on the computer tower behind the desk and the bookshelf. [computer tower-7]
+3. Sit down on the nearest chair. [chair-26]
+4. Fetch the mouse on the desk. [mouse-8]
+5. Look at the screen of the monitor. [monitor-14]
+
+===
+
+Task: Go to sleep.
+Steps:
+1. Go to the curtain. [curtain-11]
+2. Close it. [curtain-11]
+3. Walk to the nightstand with the telephone. [nightstand-15]
+4. Turn off the lamp on this nightstand. [lamp-19]
+5. Go to the other nightstand. [nightstand-14]
+6. Set the alarm on it. [alarm clock-28]
+7. Lie down on the bed. [bed-20]

@@ -139,3 +139,6 @@ outputs
 *.out
 
 tmp
+data_generation/scene_graphs_w_obj_cap
+data_generation/responses
+data_generation/splits

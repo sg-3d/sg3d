@@ -102,6 +102,9 @@ python launch.py --mode ${launch_mode} \
     --config {config}  \
 ```
 
+### Task Data generation
+We have released our task data generation scripts in the `data_generation/` directory. For detailed instructions, refer to the [data generation guide](data_generation/README.md).
+
 ### Acknowledgement
 We would like to thank the authors of [LEO](https://embodied-generalist.github.io), [Vil3dref](https://github.com/cshizhe/vil3dref), [Mask3d](https://github.com/JonasSchult/Mask3D), [Openscene](https://github.com/pengsongyou/openscene), [Xdecoder](https://github.com/microsoft/X-Decoder), and [3D-VisTA](https://github.com/3d-vista/3D-VisTA) for their open-source release.
 
