@@ -35,6 +35,7 @@ This repository is the official implementation of the paper "Task-oriented Seque
 </div>
 
 ### News
+- [ 2024.09 ] Release codes of data generation!
 - [ 2024.08 ] Release codes of model! 
 
 ### Abstract
