@@ -1,6 +1,6 @@
 ## Task-oriented Sequential Grounding in 3D Scenes
 
-<p align="left">
+<!-- <p align="left">
     <a href='https://arxiv.org/pdf/2408.04034'>
       <img src='https://img.shields.io/badge/Paper-PDF-red?style=plastic&logo=adobeacrobatreader&logoColor=red' alt='Paper PDF'>
     </a>
@@ -26,7 +26,7 @@
 [Yixin Chen](https://yixchen.github.io/),
 [Baoxiong Jia](https://buzz-beater.github.io),
 [Siyuan Huang](https://siyuanhuang.com/),
-[Qing Li](https://liqing-ustc.github.io/)📧
+[Qing Li](https://liqing-ustc.github.io/)📧 -->
 
 This repository is the official implementation of the paper "Task-oriented Sequential Grounding in 3D Sceness".
 
@@ -110,7 +110,7 @@ We have released our task data generation scripts in the `data_generation/` dire
 We would like to thank the authors of [LEO](https://embodied-generalist.github.io), [Vil3dref](https://github.com/cshizhe/vil3dref), [Mask3d](https://github.com/JonasSchult/Mask3D), [Openscene](https://github.com/pengsongyou/openscene), [Xdecoder](https://github.com/microsoft/X-Decoder), and [3D-VisTA](https://github.com/3d-vista/3D-VisTA) for their open-source release.
 
 
-### Citation:
+<!-- ### Citation:
 ```bibtex
 @article{sg3d,
     title={Task-oriented Sequential Grounding in 3D Scenes},
@@ -118,4 +118,4 @@ We would like to thank the authors of [LEO](https://embodied-generalist.github.i
     journal={arXiv preprint arXiv:2408.04034}
     year={2024}
 }
-```
+``` -->
